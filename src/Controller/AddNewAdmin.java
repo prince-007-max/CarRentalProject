@@ -1,0 +1,61 @@
+package Controller;
+
+import Model.Database;
+import Model.Operation;
+import Model.User;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class AddNewAdmin implements Operation{
+    @Override
+    public void operation(Database database, Scanner s, User user) {
+        System.out.println("Enter the First Name: ");
+        String first_name = s.next();
+
+        System.out.println("Enter the Last name: ");
+        String last_name = s.next();
+        System.out.println("Enter the Email: ");
+        String email = s.next();
+        System.out.println("Enter the Phone number: ");
+        String phone_number = s.next();
+        System.out.println("Enter the Password: ");
+        String password = s.next();
+        System.out.println("Enter the Confirm Password: ");
+        String confirmpassword = s.next();
+        while(!password.equals(confirmpassword)){
+            System.out.println("Password dosn't match");
+            System.out.println("Enter the Password: ");
+            password = s.next();
+            System.out.println("Enter the Confirm Password: ");
+            confirmpassword = s.next();
+        }
+
+        int accType = 1; // 1 = Admin, 2 = Customer, etc.
+
+        try {
+
+            String insertQuery = "INSERT INTO Users (first_name, last_name, email, phone_number, password, acc_type) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement pstmt = database.getConnection().prepareStatement(insertQuery);
+
+            pstmt.setString(1, first_name);
+            pstmt.setString(2, last_name);
+            pstmt.setString(3, email);
+            pstmt.setString(4, phone_number);
+            pstmt.setString(5, password);
+            pstmt.setInt(6, accType);
+
+
+            pstmt.executeUpdate();
+
+            System.out.println("✅ Admin account created successfully!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+}
