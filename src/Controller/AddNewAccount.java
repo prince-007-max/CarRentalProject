@@ -1,13 +1,23 @@
 package Controller;
 
+import Model.Client;
 import Model.Database;
 import Model.Operation;
 import Model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AddNewAdmin implements Operation{
+public class AddNewAccount implements Operation{
+
+    private int acctype;
+
+    public AddNewAccount(int accType){
+        this.acctype = accType;
+    }
+
+
     @Override
     public void operation(Database database, Scanner s, User user) {
         System.out.println("Enter the First Name: ");
@@ -31,11 +41,24 @@ public class AddNewAdmin implements Operation{
             confirmpassword = s.next();
         }
 
-        int accType = 1; // 1 = Admin, 2 = Customer, etc.
+
 
         try {
 
-            String insertQuery = "INSERT INTO Users (first_name, last_name, email, phone_number, password,type) " +
+            ArrayList<String> emails = new ArrayList<>();
+            ResultSet rse = database.getStatement().executeQuery("select `email` from `Users`");
+            while(rse.next()){
+                emails.add(rse.getString("email"));
+            }
+
+            if(emails.contains(email)){
+                System.out.println("This email is used before!");
+                return;
+
+            }
+
+
+            String insertQuery = "INSERT INTO Users (first_name, last_name, email, phone_number, password, type) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
 
             PreparedStatement pstmt = database.getConnection().prepareStatement(insertQuery);
@@ -45,12 +68,24 @@ public class AddNewAdmin implements Operation{
             pstmt.setString(3, email);
             pstmt.setString(4, phone_number);
             pstmt.setString(5, password);
-            pstmt.setInt(6, accType);
+            pstmt.setInt(6, acctype);
 
 
-            pstmt.executeUpdate();
+            pstmt.execute();
 
-            System.out.println("✅ Admin account created successfully!");
+            System.out.println("✅ Account created successfully!");
+
+            if(acctype == 0){
+                user = new Client();
+                user.setFirst_name(first_name);
+                user.setLast_name(last_name);
+                user.setEmail(email);
+                user.setPhoneNumber(phone_number);
+                user.setPassword(phone_number);
+                user.showList(database,s);
+
+            }
+
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -7,7 +7,7 @@ public class Database {
 
     private String user = "root";
     private String password = "Prince@[2004]*";
-    private String url = "jdbc:mysql://localhost/carrental";
+    private String url = "jdbc:mysql://localhost:3306/carrental";
     private Connection con;
     private Statement statement;
 
@@ -18,7 +18,9 @@ public class Database {
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
             );
+            System.out.println("Database created!");
         } catch (SQLException e) {
+            System.out.println("Database is failed!");
             e.printStackTrace();
         }
     }
@@ -27,5 +29,7 @@ public class Database {
         return con;
     }
 
-
+    public Statement getStatement() {
+        return statement;
+    }
 }

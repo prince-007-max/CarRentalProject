@@ -8,7 +8,7 @@ public class Car {
     private String color;
     private int year;
     private double price;
-    private boolean available;
+    private int available;
 
     public int getID(){
         return ID;
@@ -63,11 +63,11 @@ public class Car {
         this.price = price;
     }
 
-    public boolean isAvailable(){
+    public int isAvailable(){
         return available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(int available) {
         this.available = available;
     }
 }

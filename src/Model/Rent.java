@@ -3,6 +3,7 @@ package Model;
 import javax.swing.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class Rent extends User{
 
@@ -77,8 +78,7 @@ public class Rent extends User{
     }
 
     @Override
-    public void showList() {
-
+    public void showList(Database database, Scanner s) {
 
     }
 }
